@@ -1,0 +1,2 @@
+# getcid
+digital.store
