@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Confirmation ID</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Confirmation ID</h1>
+		<label for="iid">Insert Your IID Here:</label>
+		
+		<!-- Input Group for IID -->
+		<div class="input-group">
+			<input type="text" class="form-control" id="iid" placeholder="Installation ID (IID)" required>
+			<button type="button" id="btnGetcid" class="btn" disabled>GET</button>
+		</div>
+
+		<!-- Input Group for Confirmation ID -->
+		<div class="input-group">
+			<input type="text" class="form-control" id="confirmation_id_with_dash" placeholder="Confirmation ID" readonly>
+			<button type="button" id="btnCopy" class="btn">Copy</button>
+		</div>
+
+		<!-- Time Display Section -->
+		<div class="time-display-container">
+			<div class="time-label">Time Elapsed:</div>
+			<div id="time-display" class="time-display">0.00 s</div>
+		</div>
+
+		<!-- Error Message Section -->
+		<div class="error-id" id="errorMessage">Please enter a valid IID.</div>
+
+		<!-- Request Monitoring Section -->
+		<div class="request-monitoring">
+			<div>Request Count: <span id="requestCount">0</span> / <span id="maxRequests">0</span></div>
+		</div>
+		<!-- Payment Text Positioned in the Bottom Right Corner -->
+		<div class="payment-text">
+    <a href="https://google.com" class="payment-link">Payment</a>
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let startTime;
+        let timerInterval;
+
+        // Input Handler for IID
+        $("#iid").on("input", function() {
+            let t = this.value.replace(/\D/g, "");
+            if (t.length === 54 || t.length === 63) {
+                this.value = t.match(new RegExp(".{1," + t.length / 9 + "}", "g")).join("-");
+                $("#btnGetcid").prop("disabled", false);
+                $("#errorMessage").hide();
+            } else {
+                this.value = t;
+                $("#btnGetcid").prop("disabled", true);
+                $("#errorMessage").show();
+            }
+        });
+
+        // Button Click Handler for GET Confirmation ID
+        $("#btnGetcid").on("click", function() {
+            if ($(this).hasClass('loading')) return;
+
+            $(this).addClass('loading').text('Loading...');
+            const IID = $("#iid").val().replace(/-/g, '');
+            startTime = new Date();
+            timerInterval = setInterval(updateTimeDisplay, 100); // Update every 100 ms
+
+            // Request to Node.js backend
+            $.ajax({
+                url: `http://localhost:3000/getConfirmationID?iid=${IID}`,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    $("#btnGetcid").removeClass('loading').text('GET');
+                    if (data.confirmation_id_with_dash) {
+                        $("#confirmation_id_with_dash").val(data.confirmation_id_with_dash);
+                    } else {
+                        $("#confirmation_id_with_dash").val(data.message);
+                    }
+
+                    // Update request count and max requests from backend response
+                    $("#requestCount").text(data.requestCount);
+                    $("#maxRequests").text(data.maxRequests);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Error:", textStatus, errorThrown);
+                    // Handle error 429 specifically
+                    if (jqXHR.status === 429) {
+                        $("#confirmation_id_with_dash").val('Request limit reached. Please buy credit to get more CID.');
+                    } else {
+                        $("#confirmation_id_with_dash").val('Request failed. Please try again later.');
+                    }
+                    $("#btnGetcid").removeClass('loading').text('GET');
+                },
+                complete: function() {
+                    clearInterval(timerInterval);
+                    const endTime = new Date();
+                    const duration = (endTime - startTime) / 1000;
+                    $("#time-display").text(duration.toFixed(2) + " s");
+                }
+            });
+        });
+
+        // Button Click Handler for Copy Confirmation ID
+        $("#btnCopy").on("click", function() {
+            const confirmationID = $("#confirmation_id_with_dash").val();
+            if (confirmationID) {
+                navigator.clipboard.writeText(confirmationID).then(() => {
+                    alert("Confirmation ID copied to clipboard.");
+                }).catch(err => {
+                    alert("Failed to copy: " + err);
+                });
+            } else {
+                alert("No Confirmation ID to copy.");
+            }
+        });
+
+        // Timer Update Function
+        function updateTimeDisplay() {
+            const currentTime = new Date();
+            const elapsed = (currentTime - startTime) / 1000;
+            $("#time-display").text(elapsed.toFixed(2) + " s");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+.container {
+    width: 900px;
+    padding: 40px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+h1 {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #333;
+}
+label {
+    margin-bottom: -15px; /* Mengurangi jarak antara label dan form control */
+    display: block;
+    font-size: 16px;
+    color: #333;
+	font-weight: bold; /* Menambahkan garis tebal pada teks */
+}
+.form-control {
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    padding: 0 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+.btn {
+    height: 40px;
+    font-size: 18px;
+    padding: 0 15px;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #ccc;
+    border-left: none;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 120px;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+.btn:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+}
+.error-id {
+    color: red;
+    display: none;
+    margin-top: 10px;
+}
+.time-display-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 10px;
+    background-color: #e9ecef;
+    width: fit-content;
+}
+.time-display {
+    height: 40px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+.time-label {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.payment-text {
+	display: flex;
+	justify-content: flex-end;  /* Mengatur elemen agar berada di sisi kanan */
+	font-size: 15px;
+	font-weight: bold;
+	color: #000;
+    }
+.payment-link {
+        text-decoration: none;  /* Menghapus garis bawah pada link */
+        font-weight: bold;      /* Membuat teks lebih tebal */
+        color: #000;            /* Warna teks hitam */
+        padding: 10px 20px;     /* Menambahkan padding pada link */
+        border: 2px solid #d3d3d3; /* Border berwarna abu-abu cerah */
+        border-radius: 12px;    /* Membuat sudut border melengkung */
+        display: inline-block;  /* Agar padding dan border berfungsi pada link */
+    }
+
+    .payment-link:hover {
+        background-color: #f0f0f0; /* Efek hover: warna latar belakang lebih terang */
+        border-color: #bbb;         /* Border lebih gelap saat hover */
+    }
+
